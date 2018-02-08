@@ -1,0 +1,62 @@
+<?php 
+	$linkRegitser	= $this->url('shopRoute/default', array('controller' => 'index', 'action' => 'register'));
+?>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb">
+	<a href="#">Home</a> &raquo;<a href="#" class="last">Register</a>
+</div>
+
+<!-- NAME -->
+<h1 class="style-1">Register</h1>
+
+<div class="box-container">
+	<div class="login-content row">
+		<div class="col-sm-6">
+			<div class="left">
+				<div class="heading">
+					<i class="fa fa-file-text-o"></i>
+					<div class="extra-wrap">
+						<h2>New Customer</h2>
+						<b>Register Account</b>
+					</div>
+				</div>
+				<div class="content">
+					<p>By creating an account you will be able to shop faster, be up to date on an order's status, and keep track of the orders you have previously made.</p>
+					<a href="<?php echo $linkRegitser;?>" class="button-cont-right">Continue<i class="fa fa-arrow-circle-right"></i></a>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-6">
+			<div class="right">
+				<div class="heading">
+					<i class="fa fa-key"></i>
+					<div class="extra-wrap">
+						<h2>Returning Customer</h2>
+						<b>I am a returning customer</b>
+					</div>
+				</div>
+<?php 
+	$this->headTitle('Login');
+	$myForm				= $this->myForm;
+	$myForm->prepare();
+?>				
+				<?php echo $this->form()->openTag($myForm);?>
+					<?php echo $this->msgError;?>
+					<div class="content">
+						<?php 
+							echo $this->partialLoop('frontend-form-login.phtml', array(
+									array('elm' => $myForm->get('email')),
+									array('elm' => $myForm->get('password')),
+							));
+						?>
+						<div class="login-buttons">
+							<a onclick="$('#shopForm').submit();" class="button-cont-right">Login<i class="fa fa-arrow-circle-right"></i></a> 
+							<a class="link-login" href="#">Forgotten Password</a>
+						</div>
+					</div>
+				<?php echo $this->form()->closeTag();?>
+			</div>
+		</div>
+	</div>
+</div>

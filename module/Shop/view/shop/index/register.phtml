@@ -1,0 +1,38 @@
+<?php 
+	$this->headTitle('Register');
+	$myForm				= $this->myForm;
+	$myForm->prepare();
+?>
+<!-- BREADCRUMB -->
+<div class="breadcrumb">
+	<a href="#">Home</a> &raquo;<a href="#" class="last">Register</a>
+</div>
+
+<!-- NAME -->
+<h1 class="style-1">Register</h1>
+
+<div class="box-container">
+	<p>If you already have an account with us, please login at the <a href="#">login page</a>.</p>
+	
+	<?php echo $this->form()->openTag($myForm);?>
+		<div class="content">
+			<table class="form">
+				<tbody>
+					<?php 
+						echo $this->partialLoop('frontend-form-register.phtml', array(
+								array('elm' => $myForm->get('username'), 'required' => true),
+								array('elm' => $myForm->get('fullname')),
+								array('elm' => $myForm->get('email'), 'required' => true),
+								array('elm' => $myForm->get('password'), 'required' => true),
+						));
+					?>
+				</tbody>
+			</table>
+		</div>
+		<div class="buttons">
+			<div class="right">
+				<a onclick="$('#shopForm').submit();" class="button"><span>Continue</span></a>
+			</div>
+		</div>
+	<?php echo $this->form()->closeTag();?>
+</div>

@@ -1,0 +1,28 @@
+<?php
+	
+	$element	= $this->elm;
+	$require	= ($this->required == true) ? '&nbsp;<span class="required">(*)</span>' : '';
+	$labelAttr	= $element->getLabelAttributes();
+	
+	switch ($this->type) {
+		case 'hidden':
+			$xhtml	= $this->formHidden($element);
+			break;
+		default:
+			$xhtml = '<tr>
+							<td>
+								<div class="form-group">
+									<label class="'.$labelAttr['class'].'">'.$element->getLabel().$require.'</label>
+									<div class="controls col-sm-8">
+										'.$this->formElement($element).$this->formError($element).'
+									</div>
+								</div>
+							</td>
+						</tr>';
+								
+			break;
+	}
+	
+	echo $xhtml;
+	
+?>

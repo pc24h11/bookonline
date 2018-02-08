@@ -1,0 +1,9 @@
+<?php 
+	$this->headTitle('Error!');
+	$linkHome	= $this->linkHome();
+	$linkImage	= URL_TEMPLATE . '/frontend/image/error-404.png';
+?>
+
+<p>
+	<a href="<?php echo $linkHome;?>"><img src="<?php echo $linkImage;?>" alt="Request is not available"></a>
+</p>

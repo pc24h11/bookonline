@@ -1,0 +1,24 @@
+<?php echo $this->doctype();?>
+<html>
+	<head>
+		<?php 
+			// Title
+			echo $this->headTitle()->append('Error');
+			
+			// Meta
+			echo $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0')
+								  ->appendName('description', 'ZendVN - Zend framework 2.x')
+								  ->setCharset('utf-8');
+			// CSS
+			echo $this->headLink()->appendStylesheet(URL_TEMPLATE . '/error/css/bootstrap.min.css');
+			
+			// JS
+			echo $this->headScript()->appendFile(URL_TEMPLATE . '/error/js/bootstrap.min.js');
+		?>
+	</head>
+	<body>
+		<div class="container">
+			<?php echo $this->content; ?>
+		</div>
+	</body>
+</html>

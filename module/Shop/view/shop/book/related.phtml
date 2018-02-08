@@ -1,0 +1,42 @@
+<?php 
+	$isXmlHttpRequest	= $this->isXmlHttpRequest;
+	$xhtml				= '<h3 style="color:red;">Access is denied!</h3>';
+	
+	if($isXmlHttpRequest == true) {
+		if($this->data->count() == 0) return null;
+		$xhtml = '';
+		foreach ($this->data as $item){
+			
+			$imgUrl		= URL_FILES . '/books/thumb/140x190/' . $item->picture;
+			$price		= $this->cmsInfoPrice($item->price, $item->sale_off, array('task' => 'price-frontend'));
+			$name			= $item->name;
+			$linkInfoBook	= $this->linkBook($item->id, $item->name, $item->category_name);
+			$xhtml 		.= '<li class=" col-sm-3">
+								<div class="padding">
+									<div class="image2">
+										<a href="'.$linkInfoBook.'"><img src="'.$imgUrl.'" alt="'.$name.'"></a>
+									</div>
+									<div class="inner">
+										<div class="f-left">
+											<div class="price">'.$price.'</div>
+											<div class="name maxheight-spec">
+												<a href="'.$linkInfoBook.'">'.$name.'</a>
+											</div>
+										</div>
+										<div class="clear"></div>
+									</div>
+								</div>
+							</li>';
+		}
+		
+	}
+	
+?>
+<div class="box-heading">Related Products</div>
+	<div class="box-content">
+		<div class="box-product">
+		<ul class="row"><?php echo $xhtml;?>
+		</ul>
+	</div>
+	<div class="clear"></div>
+</div>

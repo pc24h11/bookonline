@@ -1,0 +1,51 @@
+<?php 
+
+	if($this->_data->count() == 0) return null;
+
+	$urlHelper		= $this->getView()->plugin('url'); 
+	$linkCategory	= $this->getView()->plugin('linkCategory'); 
+	
+	$xhtml	= '';
+	$parentRight	= array();
+	
+	
+	
+	foreach ($this->_data as $category){
+		$classLI	= ($category->level == 1) ? 'cat-header' : '';
+		$link		= $linkCategory($category->id, $category->name);
+		$name		= $category->name;
+		
+		if($category->right - $category->left == 1 || $category->level == 3){
+			$xhtml		.= sprintf('<li class="%s"><a data-id="%s" href="%s">%s</a></li>', $classLI, $category->id,$link, $name);
+			if(in_array($category->right + 1, $parentRight)) $xhtml		.= '</ul></li>';
+			if(in_array($category->right + 2, $parentRight)) $xhtml		.= '</ul></li>';
+			
+		}else{
+			$xhtml		.= sprintf('<li class="parent %s"><a data-id="%s" href="%s">%s</a><ul>', $classLI, $category->id, $link, $name);
+			$parentRight[]	= $category->right;
+		}
+	}
+
+
+?>
+<div class="box category">
+	<div class="box-heading">Categories</div>
+	<div class="box-content">
+		<div class="box-category">
+			<ul>
+				<?php echo $xhtml;?>
+			</ul>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	$(document).ready(function($){
+		var catID	= $('input[name=cat_id]').val();
+		$('div.box-category a[data-id="'+catID+'"]').parentsUntil('.box-category').addClass('active');
+		$('div.box-category a[data-id="'+catID+'"]').parent().parentsUntil('.box-category').css('display','block');
+	});
+</script>
+
+
+
+

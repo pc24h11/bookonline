@@ -1,0 +1,85 @@
+<?php
+	$urlImage 	= URL_TEMPLATE . '/frontend/image';
+	$bookInfo	= $this->data;
+	$name		= $bookInfo->name;
+	$catName	= $bookInfo->category_name;
+	$linkViewCat	= $this->linkCategory($bookInfo->category_id, $bookInfo->category_name);
+	$linkAddToCart	= $this->url('shopRoute/order',array(
+			'id' 		=> $bookInfo->id,
+			'price' 	=> $this->cmsPriceReal($bookInfo->price, $bookInfo->sale_off),
+	));
+	$description= $bookInfo->description;
+	$imgUrl		= URL_FILES . '/books/thumb/270x360/' . $bookInfo->picture;
+	$price		= $this->cmsInfoPrice($bookInfo->price, $bookInfo->sale_off, array('task' => 'price-frontend'));
+	
+	$this->headTitle($name);
+	
+	$inputHiddenCatID		= $this->zvnFormHidden('cat_id', $bookInfo->category_id);
+	$inputHiddenBookID		= $this->zvnFormHidden('book_id', $bookInfo->id);
+	$inputHiddenURLRelate	= $this->zvnFormHidden('url_related', $this->url('shopRoute/default', array(
+				'controller' => 'book', 
+				'action' 	=> 'related', 
+	)));
+	
+?>
+<div class="product-info">
+	<div class="row">
+		<div class="col-sm-4">
+			<h1 class="view"><?php echo $name;?></h1>
+			<div id="default_gallery" class="left spacing">
+				<img alt="<?php echo $name;?>" src="<?php echo $imgUrl;?>">
+			</div>
+		</div>
+
+		<div class="col-sm-8">
+			<h1><?php echo $name;?></h1>
+			<div class="description">
+				<div class="product-section">
+					<span>Category:</span><a href="<?php echo $linkViewCat;?>"><?php echo $catName;?></a>
+				</div>
+				<div class="price"><?php echo $price;?></div>
+				<div class="cart">
+					<div class="prod-row">
+						<div class="cart-top">
+							<div class="cart-top-padd form-inline">
+							<form action="<?php echo $linkAddToCart;?>" method="post" name="shopForm" id="shopForm">
+								<label>Qty: 
+									<input class="q-mini" type="text" name="quantity" value="1"> 
+								</label> 
+								<a id="button-cart" class="button-prod" onclick="$('#shopForm').submit();">
+									<i class="fa fa-shopping-cart"></i>Add to Cart
+								</a>
+							</form>
+							</div>
+							<div class="clear"></div>
+						</div>
+					</div>
+				</div>
+				<div class="clear"></div>
+			</div>
+		</div>
+	</div>
+
+	<div class="tabs">
+		<div class="tab-heading">Description</div>
+		<div class="tab-content"><?php echo $description;?></div>
+	</div>
+	<?php echo $inputHiddenCatID . $inputHiddenURLRelate . $inputHiddenBookID;?>
+</div>
+
+<div class="box related-book">
+	
+</div>
+<script type="text/javascript">
+	$(document).ready(function($){
+		var url 	= $('input[name="url_related"]').val();
+		var catID	= $('input[name="cat_id"]').val();
+		var bookID	= $('input[name="book_id"]').val();
+		$('div.related-book').load(url, {category_id: catID, book_id : bookID});
+	});
+</script>
+
+
+
+
+

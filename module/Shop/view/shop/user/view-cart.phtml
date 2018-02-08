@@ -1,0 +1,103 @@
+<?php 
+	use Zend\Session\Container;
+	
+	$this->headTitle('View Cart');
+	
+	$linkCheckOut	= $this->url('shopRoute/default', array('controller' => 'user', 'action' => 'checkout'));
+	$xhtml		= '';
+	$totalPrice	= 0;
+	if(!empty($this->items)){ 
+		$cart		= new Container(BOOKONLINE_KEY . '_cart');
+		$totalPrice	= number_format(array_sum($cart->price),0);
+		$i = 1;
+		foreach ($this->items as $item){
+			$imgUrl		= URL_FILES . '/books/thumb/80x120/' . $item->picture;
+			$name		= $item->name;
+			$quantity	= $cart->quantity[$item->id];
+			$total		= $cart->price[$item->id];
+			$unitPrice	= $total/$quantity;
+			$linkInfoBook	= $this->linkBook($item->id, $item->name, $item->category_name);
+			
+			$inputHiddenBookID		= $this->zvnFormHidden('books[]', $item->id);
+			$inputHiddenPrice		= $this->zvnFormHidden('prices[]', $unitPrice);
+			$inputHiddenQuantity	= $this->zvnFormHidden('quantities[]', $quantity);
+			$inputHiddenName		= $this->zvnFormHidden('names[]', $name);
+			$inputHiddenPicture		= $this->zvnFormHidden('pictures[]', $item->picture);
+			
+			$xhtml .= '<tr>
+						<td class="model">'.$i.'</td>
+						<td class="image">
+							<a href="'.$linkInfoBook.'">
+								<img src="'.$imgUrl.'" alt="'.$name.'">
+							</a>
+						</td>
+						<td class="name">
+							<a href="'.$linkInfoBook.'">'.$name.'</a>
+						</td>
+						<td class="quantity">
+							<input type="text" name="quantity[]" value="'.$quantity.'" size="1">
+						</td>
+						<td class="price">'.number_format($unitPrice,0).'</td>
+						<td class="total">'.number_format($total,0).'</td>
+						'.$inputHiddenBookID.$inputHiddenPrice.$inputHiddenQuantity.$inputHiddenName.$inputHiddenPicture.'
+					</tr>';
+			$i++;
+		}
+	}
+
+?>
+<!-- BREADCRUMB -->
+<div class="breadcrumb">
+	<a href="#">Home</a> &raquo;<a href="#" class="last">Shopping cart</a>
+</div>
+
+<!-- CATEGORY NAME -->
+<h1>SHOPPING CART</h1>
+
+<!-- CATEGORY INFO -->
+<form id="form-cart" action="<?php echo $linkCheckOut;?>" method="post"
+	enctype="multipart/form-data">
+	<div class="cart-info">
+		<div class="shop-cart">
+			<table class="table table-bordered ">
+				<thead>
+					<tr>
+						<td class="model">No</td>
+						<td class="image">Image</td>
+						<td class="name">Product Name</td>
+						<td class="quantity">Quantity</td>
+						<td class="price-td">Unit Price</td>
+						<td class="total-td" style="border-right: none;">Total</td>
+					</tr>
+				</thead>
+
+				<tbody>
+					<?php echo $xhtml;?>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</form>
+
+<div class="cart-bottom">
+	<div class="cart-total">
+		<table id="total" class="table table-bordered">
+			<tbody>
+				<tr class="row-table-1">
+					<td class="right cart-total-name "><b>Sub-Total:</b></td>
+					<td class="right cart-total1 "><?php echo $totalPrice;?></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="buttons">
+		<div class="right">
+			<a onclick="$('#form-cart').submit()" href="#" class="button-cont-right">Checkout<i class="fa fa-check"></i></a>
+		</div>
+		<div class="center">
+			<a href="#"
+				class="button-cont-right">Continue Shopping<i
+				class="fa fa-arrow-circle-right"></i></a>
+		</div>
+	</div>
+</div>

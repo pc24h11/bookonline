@@ -1,0 +1,123 @@
+﻿<?php
+	$urlCSS		= URL_TEMPLATE . '/frontend/css';
+	$urlJS		= URL_TEMPLATE . '/frontend/js';
+	$urlImage	= URL_TEMPLATE . '/frontend/image';
+?>
+<?php echo $this->doctype();?>
+<html>
+<head>
+	<?php 
+		echo $this->headTitle();
+		
+		echo $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0')
+							  ->appendName('description', 'ZendVN - Zend framework 2.x')
+							  ->setCharset('utf-8');
+		
+		echo $this->headLink()->appendStylesheet(array(
+									'rel'  => 'shortcut icon',
+									'type' => 'image/x-icon',
+									'href' => $urlImage . '/favicon.ico'
+							), 'PREPEND')
+							->appendStylesheet($urlCSS . '/bootstrap.css')
+							->appendStylesheet($urlCSS . '/stylesheet.css')
+							->appendStylesheet($urlCSS . '/font-awesome.min.css')
+							->appendStylesheet($urlCSS . '/responsive.css')
+							->appendStylesheet($urlCSS . '/camera.css')
+							->appendStylesheet($urlCSS . '/colorbox.css');
+		
+		echo $this->headScript()->appendFile($urlJS . '/jquery/jquery-1.10.2.min.js')
+								->appendFile($urlJS . '/jquery/jquery-migrate-1.2.1.min.js')
+								->appendFile($urlJS . '/jquery/ui/jquery-ui-1.8.16.custom.min.js')
+								->appendFile($urlJS . '/colorbox/jquery.colorbox.js')
+								->appendFile($urlJS . '/jquery.jcarousel.min.js')
+								->appendFile($urlJS . '/bootstrap/bootstrap.js')
+								->appendFile($urlJS . '/jquery.prettyPhoto.js')
+								->appendFile($urlJS . '/elevate/jquery.elevatezoom.js')
+								->appendFile($urlJS . '/script.js')
+								->appendFile($urlJS . '/sl/camera.js')
+								->appendFile($urlJS . '/bxslider/jquery.bxslider.js')
+								->appendFile($urlJS . '/common.js');
+	?>
+</head>
+
+<body>
+<div id="body">
+	<!-- MENU TOP -->
+	<?php include_once 'html/header_small_menu.php';?>
+				
+	<div id="page">
+		<div id="shadow">
+			<div class="shadow"></div>
+			
+			<!-- HEADER -->
+			<header id="header">
+			
+				<!-- MENU TOP -->
+				<?php include_once 'html/menu_top.php';?>
+				
+				<div class="container">
+					<!-- LOGO -->
+					<?php include_once 'html/header_small.php';?>
+					
+					<div class="row">
+						<div class="col-sm-12">
+							<!-- LOGO -->
+							<?php include_once 'html/header_logo.php';?>
+							
+							<!-- CART -->
+							<?php include_once 'html/header_cart.php';?>
+							
+							<!-- SEARCH -->
+							<?php include_once 'html/header_search.php';?>
+						</div>
+					</div>
+				</div>
+			</header>
+			
+			<section>
+				<div id="container">
+					<!-- BACK TOP -->
+					<p id="back-top"><a href="#top"><span></span></a></p>
+					
+					<div class="container">
+						<div id="notification"></div>
+						<div class="row">
+							<aside class="col-sm-3" id="column-left">
+								<!-- ASIDE CATEGORY -->
+								<?php echo $this->blkCategory(); ?>
+	
+								<!-- ASIDE USER SETTING -->
+								<?php if($this->identity()) echo $this->blkUserLink();?>
+								
+								<!-- ASIDE SPECIAL -->
+								<?php echo $this->blkSpecial();?>
+								
+								<!-- ASIDE FACEBOOK -->
+								<?php echo $this->blkFacebook();?>
+								
+								
+							</aside>
+							<div class="col-sm-9" id="content">
+								<!-- SLIDER -->
+								<?php if($this->controller == 'index' && $this->action == 'index') echo $this->blkSlider();?>
+
+								<!-- CONTENT -->
+								<?php echo $this->content; ?>
+							</div>
+							<div class="clear"></div>
+						</div>
+					</div>
+				</div>
+				<div class="clear"></div>
+			</section>
+
+			<!-- FOOTER -->
+			<?php include_once 'html/footer.php';?>
+			
+			<div style="display: none;"><div class="quick-view preview"></div></div>
+		</div>
+	</div>
+	
+</div>
+</body>
+</html>

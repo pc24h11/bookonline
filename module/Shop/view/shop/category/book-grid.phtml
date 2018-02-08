@@ -1,0 +1,61 @@
+<?php
+	$items			= $this->items;
+	$totalItem		= $this->items->count();
+	
+	if($totalItem > 0){
+		$i				= 1;
+		if($totalItem % 3 != 0) $totalItem = $totalItem+(3-$totalItem % 3);
+		foreach ($items as $item){
+			$imgUrl			= URL_FILES . '/books/thumb/140x190/' . $item->picture;
+			$name			= $item->name;
+			$linkBookInfo	= $this->linkBook($item->id, $item->name, $item->category_name);
+			$price			= $this->cmsInfoPrice($item->price, $item->sale_off, array('task' => 'price-frontend'));
+			$linkAddToCart	= $this->url('shopRoute/order',array(
+					'id' 		=> $item->id,
+					'price' 	=> $this->cmsPriceReal($item->price, $item->sale_off),
+					'quantity' 	=> 1,
+			));
+			
+			if(!empty($item->description)){
+				$config		= array(array('HTML.AllowedElements', 's,u,em'));
+				 
+				$filter		= new \Zendvn\Filter\Purifier($config);
+				$description	= $filter->filter($item->description);
+				$description	= $this->cmsSummary($description, 400);
+			}
+			
+			
+			$classLI		= '';
+			if($i % 3 == 1) $classLI	= 'first-in-line';
+			if($i % 3 == 0) $classLI	= 'last-in-line';
+			if(in_array($i, array($totalItem, $totalItem-1, $totalItem-2))) $classLI	.= ' last_line';
+		
+			$xhtmlGrid .= '<li class="col-sm-4 '.$classLI.'">
+							<div class="padding">
+								<div class="image">
+									<a href="'.$linkBookInfo.'">
+										<img src="'.$imgUrl.'" title="'.$name.'" alt="'.$name.'">
+									</a>
+								</div>
+								<div class="left">
+									<div class="name">
+										<a href="'.$linkBookInfo.'">'.$name.'</a>
+									</div>
+									<div class="price">'.$price.'</div>
+									<div class="cart-button">
+										<div class="cart">
+											<a href="'.$linkAddToCart.'" class="button" title="Add to Cart"><span>Add to Cart</span></a>
+										</div>
+										<div class="clear"></div>
+									</div>
+								</div>
+							</div>
+						</li>';
+			$i++;
+		}
+	}else{
+		$xhtmlGrid		= '<p class="my-notice">Dữ liệu đang được cập nhật</p>';
+	}
+?>
+
+<div class="product-grid"><ul class="row"><?php echo $xhtmlGrid; ?></ul></div>

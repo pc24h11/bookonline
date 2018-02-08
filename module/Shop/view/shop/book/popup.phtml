@@ -1,0 +1,42 @@
+<?php 
+	$isXmlHttpRequest	= $this->isXmlHttpRequest;
+	$data				= $this->data;
+	$description		= $data->description;
+	$xhtml				= '<h3 style="color:red;">Access is denied!</h3>';
+	$saleOff			= $this->cmsInfoPrice($data->price, $data->sale_off, array('task' => 'price-frontend'));
+	$linkInfoBook		= $this->linkBook($data->id, $data->name, $data->category_name);
+	if($isXmlHttpRequest == true) {
+		$imgUrl			= URL_FILES . '/books/thumb/140x190/' . $data->picture;
+		$name			= $data->name;
+		$linkAddToCart	= $this->url('shopRoute/order',array(
+				'id' 		=> $data->id,
+				'price' 	=> $this->cmsPriceReal($data->price, $data->sale_off),
+				'quantity' 	=> 1,
+		));
+		
+		$xhtml = '<div class="wrapper marg row">
+					<div class="left col-sm-4">
+						<div class="image3">
+							<a href="'.$linkInfoBook.'"><img src="'.$imgUrl.'" alt="'.$name.'" /></a>
+						</div>
+					</div>
+					<div class="right col-sm-8">
+						<h2>'.$name.'</h2>
+						<div class="inf">
+							<div class="price"><span class="text-price">Price: </span>'.$saleOff.'</div>
+						</div>
+						<div class="cart-button">
+							<div class="cart">
+								<a href="'.$linkAddToCart.'" title="Add to cart" class="button addToCart-1 "> <span>Add to cart</span></a>
+							</div>
+							<span class="clear"></span>
+						</div>
+						<div class="clear"></div>
+					</div>
+				</div>
+				<div class="description">'.$description.'</div>';
+	}
+	
+	echo $xhtml;
+?>
+

@@ -1,0 +1,11 @@
+<?php 
+	$this->headTitle('Active success!');
+	$linkHome	= $this->url('shopRoute/default', array(
+		'controller'	=> 'index',	
+		'action'		=> 'index',	
+	));
+?>
+
+<p class="my-notice">
+Đường link kích hoạt không phù hợp! Click vào <a href="<?php echo $linkHome;?>">đây</a> để quay về trang chủ
+</p>

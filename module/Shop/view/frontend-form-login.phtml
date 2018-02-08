@@ -1,0 +1,23 @@
+<?php
+	
+	$element	= $this->elm;
+	$labelAttr	= $element->getLabelAttributes();
+	
+	switch ($this->type) {
+		case 'hidden':
+			$xhtml	= $this->formHidden($element);
+			break;
+		default:
+			$xhtml = '<div class="form-group">
+							<label class="'.$labelAttr['class'].'">'.$element->getLabel().'</label>
+							<div class="controls col-sm-7">
+								'.$this->formElement($element).$this->formError($element).'
+							</div>
+						</div>';
+								
+			break;
+	}
+	
+	echo $xhtml;
+	
+?>

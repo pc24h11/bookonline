@@ -1,0 +1,43 @@
+<?php 
+	//$name, $icon, $type, $showTotal = null, $link = null
+	$currentController	= $this->layout()->controller;
+	$currentAction		= $this->layout()->action;
+	
+	switch ($currentAction) {
+		case 'index':
+			$btnUpdate		= $this->cmsButtonToolbar('Ordering', 'fa-refresh', 'ordering', 'yes', null);
+			
+			$linkAdd		= $this->cmsLinkAdmin(array('controller' => $currentController, 'action' => 'form'));
+			$btnAdd			= $this->cmsButtonToolbar('Add', 'fa-plus-square-o', null, null, $linkAdd);
+			
+			$btnActive		= $this->cmsButtonToolbar('Active', 'fa-check-circle-o', 'active', 'yes', null);
+			$btnInActive	= $this->cmsButtonToolbar('InActive', 'fa-circle-o', 'inactive', 'yes', null);
+			$btnDelete		= $this->cmsButtonToolbar('Delete', 'fa-minus-square-o', 'delete', 'yes', null);
+			
+			$strToolbar 	= $btnUpdate . $btnAdd . $btnActive . $btnInActive . $btnDelete;
+			if($currentController == 'category') {
+				$strToolbar 	= $btnAdd . $btnActive . $btnInActive . $btnDelete;
+			}
+			
+			break;
+			
+		case 'form':
+			$btnSave		= $this->cmsButtonToolbar('Save', 'fa-save', 'save', null, null);
+			$btnSaveClose	= $this->cmsButtonToolbar('Save & Close', 'fa-folder-open-o', 'save-close', null, null);
+			$btnSaveNew		= $this->cmsButtonToolbar('Save & New', 'fa-plus-square', 'save-new', null, null);
+			
+			$linkCancel		= $this->cmsLinkAdmin(array('controller' => $currentController, 'action' => 'index'));
+			$btnCancel		= $this->cmsButtonToolbar('Cancel', 'fa-arrow-circle-left', null, null, $linkCancel);
+			
+			$strToolbar 	= $btnSave . $btnSaveClose . $btnSaveNew . $btnCancel;
+			break;
+			
+		default:
+			break;
+	}
+?>
+<div class="row">
+	<div class="text-center">
+		<?php echo $strToolbar;?>
+	</div>
+</div>

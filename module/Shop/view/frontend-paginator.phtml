@@ -1,0 +1,50 @@
+<?php 
+	if ($this->pageCount == 1) return '';
+	// Link
+	$this->currentURL	= $this->currentURL . 'page/';
+	$linkStart		= $this->currentURL . $this->first;
+	$linkEnd		= $this->currentURL . $this->last;
+	$linkNext		= $this->currentURL . $this->next;
+	$linkPrevious	= $this->currentURL . $this->previous;
+	
+	// Button
+	$startXhtml		= '';
+	$previousXhtml	= '';
+	$nextXhtml		= '';
+	$endXhtml		= '';
+	
+	if($this->current != 1){
+		$startXhtml		= sprintf('<a href="%s">|&lt;</a>', $linkStart);
+		$previousXhtml	= sprintf('<a href="%s">&lt;</a>', $linkPrevious);
+	}
+	
+	if($this->current != $this->last){
+		$nextXhtml		= sprintf('<a href="%s">&gt;</a>', $linkNext);
+		$endXhtml		= sprintf('<a href="%s">&gt;|</a>', $linkEnd);
+	}
+	
+	$pagesInRange	= '';
+	foreach ($this->pagesInRange as $key) {
+		$linkPage	=	$this->currentURL . $key;
+		
+		if($this->current == $key) {
+			$pagesInRange	.= sprintf('<b>%s</b>',$key);
+		}else{
+			$pagesInRange	.= sprintf('<a href="%s">%s</a>', $linkPage, $key);
+		}
+	}
+?>
+<div class="pagination">
+	<div class="links">
+		<?php echo $startXhtml;?>
+		<?php echo $previousXhtml;?>
+		<?php echo $pagesInRange;?>
+		<?php echo $nextXhtml;?>
+		<?php echo $endXhtml;?>
+	</div>
+	<div class="results">
+		<?php echo sprintf('Showing %s to %s of %s (%s Pages)', $this->firstItemNumber, $this->lastItemNumber ,$this->totalItemCount, $this->pageCount); ?>
+	</div>
+</div>
+
+

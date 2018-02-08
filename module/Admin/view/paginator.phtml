@@ -1,0 +1,54 @@
+<?php 
+	if ($this->pageCount == 1) return '';
+	// Link
+	$this->currentURL	= $this->currentURL . 'page/';
+	$linkStart		= $this->currentURL . $this->first;
+	$linkEnd		= $this->currentURL . $this->last;
+	$linkNext		= $this->currentURL . $this->next;
+	$linkPrevious	= $this->currentURL . $this->previous;
+	
+	// Button
+	$startXhtml		= '<li class="disabled"><a href="#">&laquo;</a></li>';
+	$previousXhtml	= '<li class="disabled"><a href="#">Previous</a></li>';
+	$nextXhtml		= '<li class="disabled"><a href="#">Next</a></li>';
+	$endXhtml		= '<li class="disabled"><a href="#">&raquo;</a></li>';
+	
+	if($this->current != 1){
+		$startXhtml		= sprintf('<li><a href="%s">&laquo;</a></li>', $linkStart);
+		$previousXhtml	= sprintf('<li><a href="%s">Previous</a></li>', $linkPrevious);
+	}
+	
+	if($this->current != $this->last){
+		$nextXhtml		= sprintf('<li><a href="%s">Next</a></li>', $linkNext);
+		$endXhtml		= sprintf('<li><a href="%s">&raquo;</a></li>', $linkEnd);
+	}
+	
+	$pagesInRange	= '';
+	foreach ($this->pagesInRange as $key) {
+		$linkPage	=	$this->currentURL . $key;
+		
+		if($this->current == $key) {
+			$pagesInRange	.= sprintf('<li class="active"><a href="#">%s <span class="sr-only">(current)</span></a></li>',$key);
+		}else{
+			$pagesInRange	.= sprintf('<li><a href="%s">%s</a></li>', $linkPage, $key);
+		}
+	}
+?>
+<div class="row">
+	<div class="col-xs-6">
+		<div class="dataTables_info">
+			<?php echo sprintf('Showing %s to %s of %s entries', $this->firstItemNumber, $this->lastItemNumber ,$this->totalItemCount); ?>
+		</div>
+	</div>
+	<div class="col-xs-6">
+		<div class="dataTables_paginate paging_bootstrap">
+			<ul class="pagination">
+				<?php echo $startXhtml;?>
+				<?php echo $previousXhtml;?>
+				<?php echo $pagesInRange;?>
+				<?php echo $nextXhtml;?>
+				<?php echo $endXhtml;?>
+			</ul>
+		</div>
+	</div>
+</div>

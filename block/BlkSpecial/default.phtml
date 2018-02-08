@@ -1,0 +1,65 @@
+<?php 
+	if(empty($this->_data)) return null;
+
+	$cmsInfoPrice	= $this->getView()->plugin('cmsInfoPrice');
+	$urlHelper		= $this->getView()->plugin('url');
+	$linkBook		= $this->getView()->plugin('linkBook');
+	$cmsPriceReal	= $this->getView()->plugin('cmsPriceReal');
+	
+	$infoBook		= $this->_data;
+	$imgUrl			= URL_FILES . '/books/thumb/140x190/' . $infoBook->picture;
+	$name			= $infoBook->name;
+	$linkPopup		= $urlHelper('shopRoute/default',array('controller' => 'book', 'action' => 'popup'));
+	
+	$linkAddToCart	= $urlHelper('shopRoute/order',array(
+			'id' 		=> $infoBook->id,
+			'price' 	=> $cmsPriceReal($infoBook->price, $infoBook->sale_off),
+			//'quantity' 	=> 1,
+	));
+	
+	$linkInfoBook	= $linkBook($infoBook->id, $infoBook->name, 'special');
+?>
+
+<div class="box specials">
+	<div class="box-heading special-heading">Specials</div>
+	<div class="box-content">
+		<div class="box-product">
+			<ul class="row">
+				<li class="first-in-line col-sm-4">
+					<div class="padding">
+						<div class="image2">
+							<a href="<?php echo $linkInfoBook;?>">
+								<img src="<?php echo $imgUrl; ?>" alt="<?php echo $name;?>" />
+							</a>
+						</div>
+						
+						<!-- SHOW POPUP -->
+						<a href="<?php echo $linkPopup;?>" data-id="<?php echo $infoBook->id;?>" class="colorbox quick-view-button"><i class="fa fa-search"></i></a>
+						
+						<div class="inner">
+							<div class="f-left">
+								<div class="price">
+									<?php echo $cmsInfoPrice($infoBook->price, $infoBook->sale_off, array('task' => 'price-frontend'));?>
+								</div>
+								<div class="name maxheight-spec">
+									<a href="<?php echo $linkInfoBook;?>"><?php echo $name;?></a>
+								</div>
+							</div>
+							
+							<div class="cart-button">
+								<div class="cart">
+									<a title="Add to cart" data-id="43;" class="button addToCart" href="<?php echo $linkAddToCart;?>">
+										<span>Add to cart</span>
+									</a>
+								</div>
+								<span class="clear"></span>
+							</div>
+							<div class="clear"></div>
+						</div>
+						<div class="clear"></div>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>

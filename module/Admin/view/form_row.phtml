@@ -1,0 +1,51 @@
+<?php
+	
+	$element	= $this->elm;
+	$type 		= $this->type;
+	
+	switch ($this->type) {
+		case 'hidden':
+			$xhtml	= $this->formHidden($element);
+			break;
+		case 'avatar':
+			$avatarName	= $element->getValue();
+			$xhtml		= '';
+			
+			if(!empty($avatarName)){
+				$avatarUrl = URL_FILES . '/users/thumb/'.$avatarName;
+				$xhtml	= sprintf('<div class="form-group"><label for="avatar" class="col-xs-3 control-label"></label><div class="col-xs-6">
+								<img src="%s" class="img-thumbnail"></div></div>',$avatarUrl);
+			}
+			
+			break;
+		case 'slider':
+			$imgName	= $element->getValue();
+			$xhtml		= '';
+				
+			if(!empty($imgName)){
+				$imgUrl = URL_FILES . '/sliders/'.$imgName;
+				$xhtml	= sprintf('<div class="form-group"><label for="avatar" class="col-xs-3 control-label"></label><div class="col-xs-6">
+							<img src="%s" class="img-thumbnail"></div></div>',$imgUrl);
+			}
+				
+			break;
+		case 'book':
+			$imgName	= $element->getValue();
+			$xhtml		= '';
+				
+			if(!empty($imgName)){
+				$imgUrl = URL_FILES . '/books/thumb/140x190/'.$imgName;
+				$xhtml	= sprintf('<div class="form-group"><label for="avatar" class="col-xs-3 control-label"></label><div class="col-xs-6">
+							<img src="%s" class="img-thumbnail"></div></div>',$imgUrl);
+			}
+				
+			break;
+		default:
+			$xhtml = sprintf('<div class="form-group">%s<div class="col-xs-6">%s</div></div>', 
+								$this->formLabel($element),$this->formElement($element));
+			break;
+	}
+	
+	echo $xhtml;
+	
+?>

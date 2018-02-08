@@ -1,0 +1,81 @@
+<?php 
+	use Zend\Json\Json;
+
+	$this->headTitle('History');
+	foreach ($this->items as $item){
+		$code		= $item->id;
+		$status		= ($item->status == 1) ? 'Active' : 'In Active';
+		$date		= date('H:i:s d-m-Y', strtotime($item->date));
+		$arrBookID	= Json::decode($item->books);
+		$arrPrice	= Json::decode($item->prices);
+		$arrQauntity= Json::decode($item->quantities);
+		$arrPicture	= Json::decode($item->pictures);
+		$arrName	= Json::decode($item->names);
+		
+		$xhtmlContent	= '';
+		$i	= 1;
+		$totalPrice		= 0;
+		foreach ($arrBookID as $key => $bookID){
+			$price		= $arrPrice[$key];
+			$quantity	= $arrQauntity[$key];
+			$name		= $arrName[$key];
+			$pictureURL	= URL_FILES . '/books/thumb/80x120/' . $arrPicture[$key];
+			$link		= $this->linkBook($bookID, $name, 'history');
+			
+			$total		= $price * $quantity;
+			$totalPrice+= $total;
+			$xhtmlContent .= '<tr>
+								<td class="model">'.$i.'</td>
+								<td class="image"><a href="'.$link.'">
+									<img src="'.$pictureURL.'" alt="'.$name.'" title="'.$name.'"></a>
+								</td>
+								<td class="name"><a href="'.$link.'">'.$name.'</a></td>
+								<td class="quantity"><input type="text" name="quantity" value="'.$quantity.'" size="1"></td>
+								<td class="price">'.number_format($price,0).'</td>
+								<td class="total">'.number_format($total,0).'</td>
+							</tr>';
+			$i++;
+		}
+		
+		$xhtmlHeader	= sprintf('<h3>Code: %s (%s) - <b style="color:red">Status: %s</b></h3>', $code, $date, $status);
+		
+		$xhtml	.= $xhtmlHeader . '<table class="table table-bordered ">
+						<thead>
+							<tr style="font-weight: bold;">
+								<td class="model">No</td>
+								<td class="image">Image</td>
+								<td class="name">Product Name</td>
+								
+								<td class="quantity">Quantity</td>
+								<td class="price-td">Unit Price</td>
+								<td class="total-td" style="border-right: none;">Total</td>
+							</tr>
+						</thead>
+							
+						<tbody>
+							'.$xhtmlContent.'
+							<tr>
+								<td class="text-right" colspan="6"><b>Total: '.number_format($totalPrice,0).'</b></td>
+							</tr>
+			
+						</tbody>
+					</table>';
+		
+	}
+?>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb">
+	<a href="#">Home</a> &raquo;<a href="#" class="last">Shopping cart</a>
+</div>
+
+<!-- CATEGORY NAME -->
+<h1>SHOPPING CART</h1>
+
+<!-- CATEGORY INFO -->
+<div class="cart-info">
+	<div class="shop-cart">
+		<?php echo $xhtml;?>
+	</div>
+</div>
+

@@ -1,0 +1,31 @@
+<?php 
+	if($this->_data->count() == 0) return null;
+	$linkBook	= $this->getView()->plugin('linkBook');
+	
+	$xhtml = '';
+	$i = 1;
+	foreach ($this->_data as $slider){
+		
+		$imgUrl			= URL_FILES . '/sliders/' . $slider->picture;
+		$link			= $linkBook($slider->book_id, $slider->name, 'slider');
+		$name			= $slider->name;
+		$description	= $slider->description;
+		$price			= number_format($slider->price,0);
+		
+		$xhtml .= '<div title="slide-'.$i.'"	data-thumb="'.$imgUrl.'" data-link="'.$link.'" data-src="'.$imgUrl.'">
+						<div class="camera_caption fadeIn">
+							<h1>'.$name.'</h1>
+							<p>'.$description.'</p>
+							<span>'.$price.'</span> 
+							<a href="'.$link.'">Shop now!</a>
+						</div>
+					</div>';
+		$i++;
+	}
+?>
+<div class="fluid_container">
+	<div id="camera_wrap_0">
+		<?php echo $xhtml;?>
+	</div>
+	<div class="clear"></div>
+</div>

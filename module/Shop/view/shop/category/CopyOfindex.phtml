@@ -1,0 +1,94 @@
+<?php 
+	$this->headTitle($categoryInfo->name);
+	$categoryInfo	= $this->categoryInfo;
+	$id				= $categoryInfo->id;
+	$filter			= $this->filter;
+	$display		= $filter['display'];
+	$page			= $filter['page'];
+	$order			= $filter['order'];
+	$dir			= $filter['dir'];
+	$limit			= $filter['limit'];
+
+	$linkDisplayGrid	= $this->url('shopRoute/category', array('id' => $id, 'display' => 'grid', 'page' => $page, 'order' => $order, 'dir' => $dir, 'limit' => $limit));
+	$linkDisplayGrid	= $this->linkListbook($id, $categoryInfo->name, array('display' => 'grid', 'page' => $page, 'order' => $order, 'dir' => $dir, 'limit' => $limit));
+	$linkDisplayList	= $this->url('shopRoute/category', array('id' => $id, 'display' => 'list', 'page' => $page, 'order' => $order, 'dir' => $dir, 'limit' => $limit));
+	
+	$linkSortCurrent	= $this->url('shopRoute/category', array('id' => $id, 'display' => $display, 'page' => 1, 'order' => $order, 'dir' => $dir, 'limit' => $limit));
+	$linkSortDefault	= $this->url('shopRoute/category', array('id' => $id, 'display' => $display, 'page' => 1, 'order' => 'id', 'dir' => 'DESC', 'limit' => $limit));
+	$linkSortNameASC	= $this->url('shopRoute/category', array('id' => $id, 'display' => $display, 'page' => 1, 'order' => 'name', 'dir' => 'ASC', 'limit' => $limit));
+	$linkSortNameDESC	= $this->url('shopRoute/category', array('id' => $id, 'display' => $display, 'page' => 1, 'order' => 'name', 'dir' => 'DESC', 'limit' => $limit));
+	$linkSortPriceASC	= $this->url('shopRoute/category', array('id' => $id, 'display' => $display, 'page' => 1, 'order' => 'price', 'dir' => 'ASC', 'limit' => $limit));
+	$linkSortPriceDESC	= $this->url('shopRoute/category', array('id' => $id, 'display' => $display, 'page' => 1, 'order' => 'price', 'dir' => 'DESC', 'limit' => $limit));
+	
+	$linkLimitCurrent	= $this->url('shopRoute/category', array('id' => $id, 'display' => $display, 'page' => 1, 'order' => $order, 'dir' => $dir, 'limit' => $limit));
+	$linkLimit3			= $this->url('shopRoute/category', array('id' => $id, 'display' => $display, 'page' => 1, 'order' => $order, 'dir' => $dir, 'limit' => 3));
+	$linkLimit6			= $this->url('shopRoute/category', array('id' => $id, 'display' => $display, 'page' => 1, 'order' => $order, 'dir' => $dir, 'limit' => 6));
+	$linkLimit9			= $this->url('shopRoute/category', array('id' => $id, 'display' => $display, 'page' => 1, 'order' => $order, 'dir' => $dir, 'limit' => 9));
+	$linkLimit12		= $this->url('shopRoute/category', array('id' => $id, 'display' => $display, 'page' => 1, 'order' => $order, 'dir' => $dir, 'limit' => 12));
+	
+	$inputHiddenCatID	= $this->zvnFormHidden('cat_id', $id);
+	$elmDisplayGrid		= $this->cmsChangeDisplay($linkDisplayGrid, 'grid', 'fa-th', $display);
+	$elmDisplayList		= $this->cmsChangeDisplay($linkDisplayList, 'list', 'fa-list', $display);
+	$slbFilterSortby	= $this->zvnFormSelect('filter_sortby', null, array(
+			$linkSortDefault	=> 'Default',
+			$linkSortNameASC	=> 'Name (A - Z)',
+			$linkSortNameDESC	=> 'Name (Z - A)',
+			$linkSortPriceASC	=> 'Price (Low - Height)',
+			$linkSortPriceDESC	=> 'Price (Height - Low)'
+	), $linkSortCurrent);
+	
+	$slbFilterLimit		= $this->zvnFormSelect('filter_limit', null, array(
+			$linkLimit3		=> 3,
+			$linkLimit6		=> 6,
+			$linkLimit9		=> 9,
+			$linkLimit12	=> 12,
+	), $linkLimitCurrent);
+	
+?>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb"><?php echo $this->cmsBreadcrumb($this->breadcrumb);?></div>
+
+<!-- CATEGORY NAME -->
+<h1 class="style-1"><?php echo $categoryInfo->name;?></h1>
+
+<!-- CATEGORY INFO -->
+<div class="category-info"><?php echo $categoryInfo->description;?></div>
+
+<!-- PRODUCT FILTER -->
+<div class="product-filter">
+	<div class="sort"><b>Sort By:</b><?php echo $slbFilterSortby;?></div>
+	<div class="limit"><b>Show:</b> <?php echo $slbFilterLimit;?></div>
+	<div class="display"><b>Display:</b> <?php echo $elmDisplayGrid . $elmDisplayList;?></div>
+</div>
+
+<!-- PRODUCT GRID -->
+<?php echo $this->listBook;?>
+
+<!-- PAGINATION -->
+<?php
+	$currentURL = $this->url('shopRoute/category', array(
+		'id'		=> $id,
+		'display'	=> $display,
+		'order'		=> $order,
+		'dir'		=> $dir,
+		'limit'		=> $limit
+	));
+	echo $this->paginationControl ( $this->paginator, 'sliding', 'frontend-paginator.phtml', array ('currentURL' => $currentURL ));
+	echo $inputHiddenCatID;
+?>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('select[name=filter_sortby]').bind('change',function(){
+				window.location	= $(this).val();
+		});
+		$('select[name=filter_limit]').bind('change',function(){
+			window.location	= $(this).val();
+		});
+	});
+</script>
+
+
+
+

@@ -1,0 +1,128 @@
+<?php 
+	$ssFilter			= $this->ssFilter;
+	$currentController	= $this->layout()->controller;
+	
+	// CREATE INPUT HIDDEN
+	$inputHiddenOrder	= $this->zvnFormHidden('order', $ssFilter['order']);
+	$inputHiddenOrderBy	= $this->zvnFormHidden('order_by', $ssFilter['order_by']);
+	$inputStatusID		= $this->zvnFormHidden('status_id', null);
+	$inputStatusValue	= $this->zvnFormHidden('status_value', null);
+	
+	$strInputHidden		= $inputHiddenOrder . $inputHiddenOrderBy . $inputStatusID . $inputStatusValue;
+
+	// CREATE SELECTBOX
+	$arrKeywordType 	= array( 'name'	=> 'Search by NAME', 'id' => 'Search by ID', 'all' => 'Search by ALL');
+	$slbKeywordType 	= $this->zvnFormSelect('filter_keyword_type', null , $arrKeywordType, $ssFilter['filter_keyword_type']);
+	$slbFilterStatus	= $this->zvnFormSelect('filter_status', '-- Select a status --', array('active' => 'Active', 'inactive' => 'Inactive'), $ssFilter['filter_status']);
+	$slbFilterLevel		= $this->zvnFormSelect('filter_level', '-- Select max level --', $this->slbLevel, $ssFilter['filter_level']);
+	
+	// CREATE INPUT
+	$inputKeyword		= $this->zvnFormInput('filter_keyword_value', $ssFilter['filter_keyword_value'], array('class' => 'form-control input-sm'));
+	
+	// CREATE BUTTON
+	$btnClear			= $this->zvnFormButton('btn-clear', 'btn-clear', 'Clear', array('class' => 'btn-default'));
+	$btnSearch			= $this->zvnFormButton('btn-go', 'btn-go', 'Search!', array('class' => 'btn-primary'));
+	
+	// DATA ITEM
+	$xhtmlItems	= '';
+	
+	if(!empty($this->items)){
+		foreach ($this->items as $item) {
+
+			$class		= $this->cycle(array('odd','even'))->next();
+			$id			= $item->id;
+			$space		= str_repeat('<span class="gi">|——</span>', $item->level - 1);
+			$name		= $item->name;
+			$created	= date('H:i:s d-m-Y', strtotime($item->created));
+			$createdBy	= $item->created_by;
+			$modified	= date('H:i:s d-m-Y', strtotime($item->modified));
+			$modifiedBy	= $item->modified_by;
+			$status		= $this->cmsButtonStatus($id, $item->status);
+			
+			// Ordering
+			$childList[$item->parent][]	= $item->id;
+			$orderingValue	= array_search($item->id, $childList[$item->parent]);
+			$ordering		= $this->zvnFormInput('ordering['.$id.']', $orderingValue + 1, array('class' => 'input-ordering'));
+			
+			$btnMoveUp		= $this->cmsButtonMove($id, 'up', $ssFilter, $item->left, $item->pleft + 1);
+			$btnMoveDown	= $this->cmsButtonMove($id, 'down', $ssFilter, $item->right + 1, $item->pright);
+			
+			$cid		= $this->zvnFormInput('cid[]', $id, array('type' => 'checkbox'));
+			$linkEdit	= $this->cmsLinkAdmin(array('controller' => $currentController, 'action' => 'form', 'id' => $id));
+			$xhtmlItems .= '<tr class="'.$class.'">
+								<td>'.$cid.'</td>
+								<td style="text-align:left">'.$space . '<a href="'.$linkEdit.'">' . $name.'</a></td>
+								<td class="area-order">'.$btnMoveUp . ' ' . $btnMoveDown . ' ' . $ordering.'</td>
+								<td>'.$created.'</td>
+								<td>'.$createdBy.'</td>
+								<td>'.$modified.'</td>
+								<td>'.$modifiedBy.'</td>
+								<td>'.$status.'</td>
+								<td>'.$id.'</td>
+							</tr>';
+		}
+	}
+	// LINK FORM SUBMIT
+	$linkFormSubmit	= $this->cmsLinkAdmin(array('controller' => $currentController, 'action' => 'filter'));
+	
+	
+?>
+
+<!-- BUTTON -->
+<?php echo $this->render('area_toolbar.phtml'); ?>
+
+<!-- NOTICE -->
+<?php echo $this->flashMessenger()->render();?>
+
+<div class="box box-info">	
+<form name="adminForm" id="adminForm" action="<?php echo $linkFormSubmit;?>" method="post">
+	<!-- FILTER -->
+	<div class="box-header" style="padding-top: 10px;">
+		<!-- FILTER KEYWORD -->
+		<div class="col-xs-6">
+			<?php
+				echo $this->partial('area_search.phtml', array( 'slbKeywordType' => $slbKeywordType,  'inputKeyword' => $inputKeyword, 'strButton'	=> $btnClear . $btnSearch));
+			?>
+		</div>
+		<!-- FILTER STATUS -->
+		<div class="col-xs-6">
+			<div class="dataTables_filter pull-right">
+				<?php echo $slbFilterLevel . ' ' . $slbFilterStatus; ?>
+			</div>
+		</div>
+	</div>
+	
+	<div class="box-body table-responsive">
+		<div class="dataTables_wrapper" role="grid">
+			<table class="table table-bordered table-striped dataTable text-center">
+				<!-- COLUMN TITLE -->
+				<thead>
+					<tr role="row">
+						<th class="small-col"><input type="checkbox" id="check-all" /></th>
+						<?php echo $this->cmsLinkSort('Name', 'name', $ssFilter); ?>
+						<?php echo $this->cmsLinkSort('Ordering', 'left', $ssFilter, array('style'=>'width:12%')); ?>
+						<?php echo $this->cmsLinkSort('Created', 'created', $ssFilter); ?>
+						<?php echo $this->cmsLinkSort('Created by', 'created_by', $ssFilter); ?>
+						<?php echo $this->cmsLinkSort('Modified', 'modified', $ssFilter); ?>
+						<?php echo $this->cmsLinkSort('Modified by', 'modified_by', $ssFilter); ?>
+						<?php echo $this->cmsLinkSort('Status', 'status', $ssFilter, array('style'=>'width:8%')); ?>
+						
+						<?php echo $this->cmsLinkSort('ID', 'id', $ssFilter, array('style'=>'width:5%')); ?>
+					</tr>
+				</thead>
+
+				<!-- CONTENT TABLE -->
+				<tbody><?php echo $xhtmlItems;?></tbody>
+			</table>
+			
+			<!-- PAGINATION -->
+			<?php
+				$currentURL = $this->cmsLinkAdmin(array('controller' => $currentController, 'action' => 'index'));
+				echo $this->paginationControl ( $this->paginator, 'sliding', 'paginator.phtml', array ('currentURL' => $currentURL ));
+			?>
+		</div>
+	</div>
+	<!-- INPUT HIDDEN -->
+	<?php echo $strInputHidden; ?>
+</form>
+</div>

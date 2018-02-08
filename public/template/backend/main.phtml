@@ -1,0 +1,72 @@
+<?php
+	$urlCSS		= URL_TEMPLATE . '/backend/css';
+	$urlJS		= URL_TEMPLATE . '/backend/js';
+	$urlImage	= URL_TEMPLATE . '/backend/img';
+?>
+<?php echo $this->doctype();?>
+<html>
+<head>
+	<?php 
+		echo $this->headTitle()->prepend('BookOnline');
+		echo $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0')
+							  ->appendName('description', 'ZendVN - Zend framework 2.x')
+							  ->setCharset('utf-8');
+		
+		echo $this->headLink()->appendStylesheet(array(
+									'rel'  => 'shortcut icon', 
+									'type' => 'image/x-icon', 
+									'href' => $urlImage . '/favicon.ico'
+							  ), 'PREPEND')
+							  ->appendStylesheet($urlCSS . '/bootstrap.min.css')
+							  ->appendStylesheet($urlCSS . '/font-awesome.min.css')
+							  ->appendStylesheet($urlCSS . '/ionicons.min.css')
+							  ->appendStylesheet($urlCSS . '/datepicker3.css')
+							  ->appendStylesheet($urlCSS . '/AdminLTE.css')
+							  ->appendStylesheet($urlCSS . '/iCheck/minimal/blue.css')
+							  ->appendStylesheet($urlCSS . '/datatables/dataTables.bootstrap.css')
+							  ->appendStylesheet($urlCSS . '/me.css');
+	?>
+</head>
+<body class="skin-blue">
+	<!-- HEADER START -->
+	<header class="header">
+		<?php include_once 'html/nav-left.php';?>
+		<?php include_once 'html/nav-right.php';?>
+	</header>
+	<!-- HEADER END -->
+	<div class="wrapper row-offcanvas row-offcanvas-left"
+		style="min-height: 599px;">
+		<!-- SIDEBAR START -->
+		<aside class="left-side sidebar-offcanvas" style="min-height: 1772px;">
+			<?php include_once 'html/sidebar.php';?>
+		</aside>
+		<!-- SIDEBAR END -->
+
+		<!-- CONTENT START -->
+		<aside class="right-side">
+			<section class="content-header">
+           		<?php include_once 'html/header.php';?>         
+			</section>
+			<section class="content">
+				<?php echo $this->content; ?>
+			</section>
+		</aside>
+		<!-- CONTENT END -->
+	</div>
+	<?php
+		echo $this->headScript()->appendFile($urlJS . '/jquery.min.js')
+							    ->appendFile($urlJS . '/bootstrap.min.js')
+							    ->appendFile($urlJS . '/jquery-ui.min.js')
+							    ->appendFile($urlJS . '/datepicker/bootstrap-datepicker.js')
+							    ->appendFile($urlJS . '/AdminLTE/app.js')
+							    ->appendFile($urlJS . '/AdminLTE/demo.js')
+							    ->appendFile($urlJS . '/me.js');
+	?>
+	<script type="text/javascript">
+		var classParent	= '<?php echo $this->module . "-" . $this->controller;?>';
+		var classChild	= '<?php echo $this->module . "-" . $this->controller . "-" . $this->action;?>';
+		$('ul.sidebar-menu > li.' + classParent).addClass('active');
+		$('ul.treeview-menu > li.' + classChild).addClass('active');
+	</script>
+</body>
+</html>

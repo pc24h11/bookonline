@@ -1,0 +1,30 @@
+<?php 
+	// <sup style="font-size: 20px">%</sup>
+	$arrBoxes = array(
+		array('bg-aqua', 150, 'New Orders', 'ion-bag', '#'),		
+		array('bg-green', '53<sup style="font-size: 20px">%</sup>', 'Bounce Rate', 'ion-stats-bars', '#'),		
+		array('bg-yellow', 44, 'User Registrations', 'ion-person-add', '#'),		
+		array('bg-red', 65, 'Unique Visitors', 'ion-pie-graph', '#'),		
+	);
+
+	$xhtmlBox = '';
+	foreach($arrBoxes as $box){
+		$xhtmlBox .= sprintf('<div class="col-lg-3 col-xs-6">
+								<div class="small-box %s">
+									<div class="inner">
+										<h3>%s</h3>
+										<p>%s</p>
+									</div>
+									<div class="icon">
+										<i class="ion %s"></i>
+									</div>
+									<a href="%s" class="small-box-footer"> More info <i
+										class="fa fa-arrow-circle-right"></i>
+									</a>
+								</div>
+							</div>', $box[0], $box[1], $box[2], $box[3], $box[4]);
+	}
+?>      
+<div class="row">
+	<?php echo $xhtmlBox;?>     		
+</div>

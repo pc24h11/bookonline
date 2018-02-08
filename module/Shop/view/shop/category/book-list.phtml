@@ -1,0 +1,53 @@
+<?php
+	$items			= $this->items;
+	$totalItem		= $this->items->count();
+	
+	if($totalItem > 0){
+		foreach ($items as $item){
+			$imgUrl			= URL_FILES . '/books/thumb/140x190/' . $item->picture;
+			$name			= $item->name;
+			$linkBookInfo	= $this->linkBook($item->id, $item->name, $item->category_name);
+			$price			= $this->cmsInfoPrice($item->price, $item->sale_off, array('task' => 'price-frontend'));
+			$linkAddToCart	= $this->url('shopRoute/order',array(
+					'id' 		=> $item->id,
+					'price' 	=> $this->cmsPriceReal($item->price, $item->sale_off),
+					'quantity' 	=> 1,
+			));
+			if(!empty($item->description)){
+				$config		= array(array('HTML.AllowedElements', 's,u,em'));
+				 
+				$filter		= new \Zendvn\Filter\Purifier($config);
+				$description	= $filter->filter($item->description);
+				$description	= $this->cmsSummary($description, 400);
+			}
+			
+			$xhtmlList		.= '<li class="">
+									<div class="row">
+										<div class="image col-sm-3">
+											<a href="'.$linkBookInfo.'">
+												<img src="'.$imgUrl.'" title="'.$name.'">
+											</a>
+										</div>
+										
+										<div class="left col-sm-9">
+											<div class="name">
+												<a href="'.$linkBookInfo.'">'.$name.'</a>
+											</div>
+											<div class="description">'.$description.'</div>
+											<div class="price">'.$price.'</div>
+											<div class="cart-button">
+												<div class="cart">
+													<a href="'.$linkAddToCart.'" class="button" title="Add to Cart"><span>Add to Cart</span></a>
+												</div>
+												<div class="clear"></div>
+											</div>
+										</div>
+									</div>
+								</li>';
+		}
+	}else{
+		$xhtmlList		= '<p class="my-notice">Dữ liệu đang được cập nhật</p>';
+	}
+?>
+
+<div class="product-list"><ul><?php echo $xhtmlList; ?></ul></div>
